@@ -1,0 +1,9 @@
+# yedek: nixpacks kullanılırsa ffmpeg gelsin
+[phases.setup]
+aptPkgs = ["ffmpeg", "ca-certificates"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "python -u main.py"

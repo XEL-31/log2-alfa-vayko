@@ -1,0 +1,24 @@
+PyroTGFork>=2.2.24
+# tgcrypto Windows'ta derleme gerektirir - opsiyonel, hız için. Hata verirse satırı sil, bottan yine çalışır
+# tgcrypto
+aiosqlite
+python-dotenv
+psutil
+yt-dlp
+emoji==1.7.0
+requests
+beautifulsoup4
+pillow
+lxml
+pytz
+sqlalchemy==1.4.46
+aiohttp
+qrcode
+pybase64
+GitPython
+speedtest-cli
+cowpy
+pylast
+pydub
+numpy
+lyricsgenius==3.0.1

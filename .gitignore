@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+sessions/
+*.db
+*.session
+*.session-journal
+.venv/
+venv/
+.vscode/
+.idea/
+# Log2 Alfa
+log2alfa.db
+log2alfa_notes.db
+log2alfa_help.html

@@ -1,0 +1,71 @@
+"""Yapay zeka — .ai <soru> (OpenRouter / DeepSeek)"""
+import json
+import urllib.request
+import config
+from pyrogram import Client, filters
+from utils.security import rate_limit
+from utils.helpers import respond
+
+SYSTEM_PROMPT = (
+    "Sen Log2 Alfa'nın yardımcısısın. "
+    "Basit işler için kullanılacaksın. Sahibine sadık, yardımsever, net ve pratik cevaplar ver."
+)
+
+
+def ask_deepseek_sync(user_message: str) -> str:
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://t.me/Log2Alfa",
+        "X-Title": "Log2Alfa",
+    }
+    payload = {
+        "model": config.OPENROUTER_MODEL,
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_message[:3000]},
+        ],
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers=headers,
+    )
+    with urllib.request.urlopen(req, timeout=45) as response:
+        result = json.loads(response.read().decode("utf-8"))
+        content = (result["choices"][0]["message"].get("content") or "").strip()
+        if not content:
+            raise RuntimeError("boş cevap")
+        return content
+
+
+@rate_limit(3)
+async def ai_handler(client: Client, message):
+    q = " ".join(message.command[1:]).strip()
+    if not q:
+        await respond(client, message, "kullanım: `.ai <soru>`")
+        return
+    try:
+        await respond(client, message, "Düşünüyorum....")
+    except Exception:
+        pass
+    try:
+        answer = ask_deepseek_sync(q)
+        if len(answer) > 4000:
+            answer = answer[:4000] + "…"
+        await respond(client, message, f"🤖 {answer}")
+    except Exception as e:
+        print(f"ai hata: {e}", flush=True)
+        try:
+            await respond(client, message, "AI şu an yanıt veremedi — tekrar dene")
+        except Exception:
+            pass
+
+
+def register_handlers(app: Client):
+    from pyrogram.handlers import MessageHandler
+    app.add_handler(MessageHandler(
+        ai_handler,
+        filters.command(["ai", "sooru"], prefixes=".") & (filters.me | filters.outgoing),
+    ))
