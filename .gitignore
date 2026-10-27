@@ -14,3 +14,4 @@ venv/
 log2alfa.db
 log2alfa_notes.db
 log2alfa_help.html
+.env
