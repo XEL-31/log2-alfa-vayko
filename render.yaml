@@ -1,0 +1,26 @@
+type: pserv
+name: log2-alfa-vayko
+runtime: docker
+plan: free
+region: frankfurt
+dockerfilePath: ./Dockerfile
+dockerContext: .
+startCommand: python -u main.py
+healthCheckPath: /health
+envVars:
+  - key: BOT_TOKEN
+    value: 8846776522:AAGxexqw9yVZO2z9RMbWLSeNX6edCi1JE9M
+  - key: API_ID
+    value: 33889261
+  - key: API_HASH
+    value: 05476becd2c15dce3f6e72445f040cf5
+  - key: OWNER_ID
+    value: 8722368605
+  - key: OWNER_NAME
+    value: vayko
+  - key: OWNER_URL
+    value: https://t.me/vaykoo
+  - key: DEV_URL
+    value: https://t.me/vaykoo
+  - key: ADMIN_UID
+    value: 8722368605
